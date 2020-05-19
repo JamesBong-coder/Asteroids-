@@ -33,7 +33,8 @@ public class PlayerController : MonoBehaviour
             if (t != 1)
                 t += DelayLerp;
         }
-        if (transform.position.z > 6 || transform.position.z < -6) transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z * -1);
+        //перенос корабля при выходе за пределы игрового пространства
+        if (transform.position.z > 6 || transform.position.z < -6) transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z * -1); //перенос корабля при выходе за пределы игрового пространства
         if (transform.position.x > 9.5f || transform.position.x < -9.5f) transform.position = new Vector3(transform.position.x * -1, transform.position.y, transform.position.z);
     }
 }
