@@ -245,6 +245,7 @@ MonoBehaviour:
   LaserPrefab: {fileID: 7837104688438869643, guid: 681f82e0b4c84e241a3c99e4ac0f57c7,
     type: 3}
   FireSpaceShip: {fileID: 6115526221431074103}
+  clips: []
   DelayBullet: 0.3
   DelayLaser: 0.5
   LaserMagazine: 0

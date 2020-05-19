@@ -30,7 +30,6 @@ public class AsteroidScript : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         asteroid.velocity = vel;
@@ -51,7 +50,7 @@ public class AsteroidScript : MonoBehaviour
             Destroy(other.gameObject);
         if (IsBig)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)//если астероид был большим, то создаем 4 маленьких
             {
                 GameObject MiniAster = Instantiate(Aster, transform.position, Quaternion.identity) as GameObject;
                 MiniAster.GetComponent<AsteroidScript>().Direction = Vector3.zero;

@@ -9,6 +9,9 @@ public class PlayerGun : MonoBehaviour
     public GameObject LaserPrefab;
     public GameObject FireSpaceShip;
 
+    public AudioClip[] clips;
+    private AudioSource aud;
+
     private float nextBullet;
     private float nextLaser;
     public float DelayBullet;
@@ -16,18 +19,10 @@ public class PlayerGun : MonoBehaviour
     [HideInInspector]
     public float LaserMagazine;
 
-    //PlayerGun(GameObject Gun, GameObject BulletPrefab, GameObject LaserPrefab, GameObject FireSpaceShip, float DelayLaser, float DelayBullet)
-    //{
-    //    this.Gun = Gun;
-    //    this.BulletPrefab = BulletPrefab;
-    //    this.LaserPrefab = LaserPrefab;
-    //    this.FireSpaceShip = FireSpaceShip;
-    //    this.DelayBullet = DelayBullet;
-    //    this.DelayLaser = DelayLaser;
-    //}
 
     void Start()
     {
+        aud = GetComponent<AudioSource>();
         nextBullet = Time.time;
         nextLaser = Time.time;
         LaserMagazine = 100;
@@ -58,6 +53,8 @@ public class PlayerGun : MonoBehaviour
         Rigidbody run = Bullet.GetComponent<Rigidbody>();
         run.AddForce(Bullet.transform.forward * 10, ForceMode.Impulse);
         nextBullet = Time.time + DelayBullet;
+        aud.clip = clips[0];
+        aud.Play();
     }
 
     public void LaserShoot()
@@ -68,5 +65,7 @@ public class PlayerGun : MonoBehaviour
         nextLaser = Time.time + DelayLaser;
         LaserMagazine -= 25;
         Debug.Log(LaserMagazine);
+        aud.clip = clips[1];
+        aud.Play();
     }
 }
