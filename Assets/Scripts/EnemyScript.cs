@@ -13,13 +13,13 @@ public class EnemyScript : MonoBehaviour
         Player = GameObject.FindGameObjectWithTag("Player");    
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         if (Player != null)
         {
             transform.LookAt(Player.transform);
-            transform.Translate(0, 0, speed * Time.deltaTime);
+            transform.Translate(0, 0, speed * Time.deltaTime); //преследование за игроком
         }
     }
 
