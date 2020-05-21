@@ -289,6 +289,9 @@
     <Reference Include="UnityEngine.XRModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.0f6/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
     </Reference>
+    <Reference Include="Asteroids 1">
+      <HintPath>C:/AAмай мусор/MY IDEYA/проги/с# юнити/Asteroids/Asteroids-/Assets/Plagins/Asteroids 1.dll</HintPath>
+    </Reference>
     <Reference Include="netstandard">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.0f6/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
     </Reference>

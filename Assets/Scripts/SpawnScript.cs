@@ -2,13 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Asteroids;
 
 public class SpawnScript : MonoBehaviour
 {
     public GameObject Asteroid;
     public GameObject Enemy;
 
-    public float minDelay = 1f, maxDelay = 4f; //for Asteroids
+    public int minDelay = 1, maxDelay = 4; //for Asteroids
     private float NextAster;
 
     public GameObject[] Spawn; // _____  стены спавна
@@ -20,44 +21,42 @@ public class SpawnScript : MonoBehaviour
     private int SpawnInd;
 
     public float DelayEnemy = 10f; //for Enemy
-    private float NextEnemy;
+
+    private SpawnStatus status;
+
     void Start()
     {
-        rnd = new System.Random();
-        NextAster = Time.time;
-        NextEnemy = Time.time + DelayEnemy;
+        status = new SpawnStatus(minDelay, maxDelay, DelayEnemy);
     }
 
     public void Update()
     {
-        if(NextAster < Time.time) SpawnAster();
-        if (NextEnemy < Time.time) SpawnEnemy();
+        if(status.CheckAster()) SpawnAster();
+        if (status.CheckEnemy()) SpawnEnemy();
     }
 
     private void SpawnAster()
     {
         GetPosition();
-        int isBig = rnd.Next(0, 5);
-        GameObject Aster = Instantiate(Asteroid, NewPos, Spawn[SpawnInd].transform.rotation) as GameObject;
+        int isB = status.GetSpawnIndex();
 
-        if (isBig == 4)
-            Aster.GetComponent<AsteroidScript>().IsBig = true;
-        else
-            Aster.GetComponent<AsteroidScript>().IsBig = false;
+        GameObject Aster = Instantiate(Asteroid, NewPos, Spawn[SpawnInd].transform.rotation) as GameObject;
+        if (isB == 3) Aster.GetComponent<AsteroidScript>().IsBig = true;
         Aster.GetComponent<AsteroidScript>().Direction = Spawn[SpawnInd].transform.forward; // задаем направление для нашего астероида которое зависит от стены  
-        NextAster = Time.time + UnityEngine.Random.Range(minDelay, maxDelay);
+        status.UpdateAsterTime();
+        
     }
 
     private void SpawnEnemy()
     {
         GetPosition();
         Instantiate(Enemy, NewPos, Spawn[SpawnInd].transform.rotation);
-        NextEnemy = Time.time + DelayEnemy;
+        status.UpdateEnemyTime();
     }
 
     private void GetPosition()
     {
-        SpawnInd = rnd.Next(0, 4); //выбираем случаюную из стен, создаем на ее области астероид и передаем ему направление движения
+        SpawnInd = status.GetSpawnIndex(); //выбираем случаюную из стен, создаем на ее области астероид и передаем ему направление движения
         float position = UnityEngine.Random.Range(-Spawn[SpawnInd].transform.localScale.x / 2, Spawn[SpawnInd].transform.localScale.x / 2);
         if (SpawnInd == 0 || SpawnInd == 1)
             NewPos = new Vector3(position, 1, Spawn[SpawnInd].transform.position.z);

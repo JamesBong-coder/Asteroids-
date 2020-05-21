@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Asteroids;
 
 public class PlayerGun : MonoBehaviour
 {
@@ -12,20 +13,16 @@ public class PlayerGun : MonoBehaviour
     public AudioClip[] clips;
     private AudioSource aud;
 
-    private float nextBullet;
-    private float nextLaser;
     public float DelayBullet;
     public float DelayLaser;
-    [HideInInspector]
-    public float LaserMagazine;
+    public float LaserMagazine = 100;
 
+    public PlayerGunStatus status;
 
     void Start()
     {
+        status = new PlayerGunStatus(DelayBullet, DelayLaser, LaserMagazine);
         aud = GetComponent<AudioSource>();
-        nextBullet = Time.time;
-        nextLaser = Time.time;
-        LaserMagazine = 100;
     }
 
 
@@ -35,16 +32,15 @@ public class PlayerGun : MonoBehaviour
             FireSpaceShip.SetActive(true);
         else FireSpaceShip.SetActive(false);
 
-        if (Input.GetButton("Fire1") && nextBullet < Time.time)//выстрел из пушки
+        if (Input.GetButton("Fire1") && status.CheckShootTime())//выстрел из пушки
         {
             Shoot();
         }
-        if (Input.GetButton("Fire2") && nextLaser < Time.time && LaserMagazine >= 25)
+        if (Input.GetButton("Fire2") && status.CheckMagazine(25))
         {
             LaserShoot(); //выстрел Лазером
         }
-        if(LaserMagazine<100)
-            LaserMagazine += 0.1f;
+        status.LaserMagazineUP(0.1f);
     }
 
     public void Shoot()
@@ -52,7 +48,7 @@ public class PlayerGun : MonoBehaviour
         GameObject Bullet = Instantiate(BulletPrefab, Gun.transform.position, Gun.transform.rotation) as GameObject;
         Rigidbody run = Bullet.GetComponent<Rigidbody>();
         run.AddForce(Bullet.transform.forward * 10, ForceMode.Impulse);
-        nextBullet = Time.time + DelayBullet;
+        status.UpdateShootTime();
         aud.clip = clips[0];
         aud.Play();
     }
@@ -62,9 +58,8 @@ public class PlayerGun : MonoBehaviour
         GameObject Laser = Instantiate(LaserPrefab, Gun.transform.position, Gun.transform.rotation) as GameObject;
         Laser.transform.parent = Gun.transform;
         Destroy(Laser, 0.2f);
-        nextLaser = Time.time + DelayLaser;
-        LaserMagazine -= 25;
-        Debug.Log(LaserMagazine);
+        status.LaserMagazineDown(25);
+        status.UpdateLaserTime();
         aud.clip = clips[1];
         aud.Play();
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Asteroids;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,33 +12,32 @@ public class GameManager : MonoBehaviour
     public Text ScoreText;
     public GameObject LoseMenu;
     public Text LoseLabel;
-    private int score;
-    private bool CheckDie;
+    private ManagerStatus status;
 
     void Start()
     {
+        status = new ManagerStatus();
         Player = GameObject.FindGameObjectWithTag("Player");
-        score = 0;
-        ScoreText.text = "Score: " + score;
+        ScoreText.text = "Score: 0";
         LoseMenu.SetActive(false);
     }
 
     void Update()
     {
         if (Player != null)
-            LaserMagazine.value = Player.GetComponent<PlayerGun>().LaserMagazine;
-        else if (!CheckDie)
+            LaserMagazine.value = Player.GetComponent<PlayerGun>().status.LaserMagazine;
+        else if (!status.CheckDie)
         {
-            CheckDie = false;
-            LoseLabel.text = "Score: " + score + "\nYou Lose\nTry again?";
+            status.CheckDie = true; ;
+            LoseLabel.text = "Score: " + status.GetScore() + "\nYou Lose\nTry again?";
             LoseMenu.SetActive(true);
         }
     }
 
     public void ScoreUP(int CurScore)
     {
-        score += CurScore;
-        ScoreText.text = "Score: " + score;
+        status.ScoreUP(CurScore);
+        ScoreText.text = "Score: " + status.GetScore();
     }
 
     public void NGButton()

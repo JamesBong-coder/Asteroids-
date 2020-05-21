@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Asteroids;
 
 public class AsteroidScript : MonoBehaviour
 {
-    // Start is called before the first frame update
+
     public float rotation;
     public float MaxSpeed, MinSpeed;
     public GameObject Explotion;
@@ -12,18 +13,21 @@ public class AsteroidScript : MonoBehaviour
     [HideInInspector]
     public Vector3 Direction;
     [HideInInspector]
-    public bool IsBig;
+    public bool IsBig = true;
     private Vector3 vel;
     private GameObject Aster;
+
+    private AsteroidStatus Status;
 
     void Start()
     {
         Aster = gameObject;
         asteroid = GetComponent<Rigidbody>();
-        asteroid.angularVelocity = Vector3.up * Random.Range(rotation * -1, rotation); ;//угловая скорость
+        asteroid.angularVelocity = Vector3.up * Random.Range(rotation * -1, rotation);//угловая скорость
         vel = Random.Range(MinSpeed, MaxSpeed) * new Vector3(Random.Range(Direction.x - 1, Direction.x + 1), 0, Random.Range(Direction.z - 1, Direction.z + 1));//направление и скорость астероида
         asteroid.velocity = vel;
-        if (!IsBig)
+        Status = new AsteroidStatus(MinSpeed, MaxSpeed, rotation, IsBig);
+        if (!Status.isBig)
             transform.localScale = Vector3.one * 0.4f;
         else
             transform.localScale = Vector3.one * 1.2f;
@@ -48,7 +52,7 @@ public class AsteroidScript : MonoBehaviour
         }
         if(other.tag!="Laser")
             Destroy(other.gameObject);
-        if (IsBig)
+        if (Status.isBig)
         {
             for (int i = 0; i < 4; i++)//если астероид был большим, то создаем 4 маленьких
             {

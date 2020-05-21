@@ -1,15 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Asteroids;
 
 public class EnemyScript : MonoBehaviour
 {
     private GameObject Player;
     public GameObject Explotion;
     public float speed;
+    private EnemyStatus status;
 
     void Start()
     {
+        status = new EnemyStatus(speed);
         Player = GameObject.FindGameObjectWithTag("Player");    
     }
 

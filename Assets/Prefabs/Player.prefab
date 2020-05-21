@@ -224,8 +224,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b644be84d18d7714baedad79ff8f39b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 5
-  _rotationSpeed: 180
+  speed: 10
+  rotationSpeed: 180
   DelayLerp: 0.001
 --- !u!114 &6460718469683990774
 MonoBehaviour:
@@ -247,7 +247,7 @@ MonoBehaviour:
   FireSpaceShip: {fileID: 6115526221431074103}
   clips: []
   DelayBullet: 0.3
-  DelayLaser: 0.5
+  DelayLaser: 0
   LaserMagazine: 0
 --- !u!54 &6460718469683990772
 Rigidbody:
