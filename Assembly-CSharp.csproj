@@ -69,11 +69,16 @@
     <Compile Include="Assets\Models\VolumetricLines\Scripts\VolumetricLineStripBehavior.cs" />
     <Compile Include="Assets\Models\VolumetricLines\Scripts\VolumetricLineVertexData.cs" />
     <Compile Include="Assets\Scripts\AsteroidScript.cs" />
+    <Compile Include="Assets\Scripts\BulletView.cs" />
     <Compile Include="Assets\Scripts\EnemyScript.cs" />
     <Compile Include="Assets\Scripts\ExplotionScript.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
-    <Compile Include="Assets\Scripts\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\LaserView.cs" />
     <Compile Include="Assets\Scripts\PlayerGun.cs" />
+    <Compile Include="Assets\Scripts\PlayerModel.cs" />
+    <Compile Include="Assets\Scripts\PlayerView.cs" />
+    <Compile Include="Assets\Scripts\PlayercControl.cs" />
+    <Compile Include="Assets\Scripts\Presenter.cs" />
     <Compile Include="Assets\Scripts\SpawnScript.cs" />
     <Compile Include="Assets\Scripts\VisualDisplay.cs" />
     <None Include="Assets\Models\VolumetricLines\BuiltInRenderPipeline\Shaders\_LineStripShader.cginc" />

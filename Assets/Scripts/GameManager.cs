@@ -18,15 +18,15 @@ public class GameManager : MonoBehaviour
     {
         status = new ManagerStatus();
         Player = GameObject.FindGameObjectWithTag("Player");
+        LaserMagazine.value = 100;
         ScoreText.text = "Score: 0";
         LoseMenu.SetActive(false);
     }
 
     void Update()
     {
-        if (Player != null)
-            LaserMagazine.value = Player.GetComponent<PlayerGun>().status.LaserMagazine;
-        else if (!status.CheckDie)
+        LaserMagazine.value = gameObject.GetComponent<PlayercControl>()._PlayerPresenter.Model.Gun.LaserMagazine;
+        if (Player == null)
         {
             status.CheckDie = true; ;
             LoseLabel.text = "Score: " + status.GetScore() + "\nYou Lose\nTry again?";
