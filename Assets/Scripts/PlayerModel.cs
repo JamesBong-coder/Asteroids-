@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class PlayerModel : MoveClass
 {
@@ -104,10 +103,7 @@ public abstract class MoveClass
 
     public float[] GetPos()
     {
-        float[] p = new float[2];
-        p[0] = PosX;
-        p[1] = PosY;
-        return p;
+        return new float[] { PosX, PosY };
     }
 
     public void Move(double accel)
@@ -195,7 +191,6 @@ public class GunModel
             laser = new LaserModel(pos[0], pos[1], angle);
             LaserMagazine -= 25;
             nextLaser = DateTime.Now.AddSeconds(LaserDelay);
-            Debug.Log(LaserMagazine);
             return true;
         }
         else return false;

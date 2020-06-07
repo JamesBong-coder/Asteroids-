@@ -95,7 +95,7 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2012627088
+--- !u!114 &-7641106888383220743
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,16 +104,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6973223752370210214}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c351f7ff1fee8c4895c109ae7e15538, type: 3}
+  m_Script: {fileID: 11500000, guid: 1a9f687474b715048a08d2868b86fd7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotation: 2
-  MaxSpeed: 1
-  MinSpeed: 0.5
-  Explotion: {fileID: 4824373851815196772, guid: f92383e4b2830b54fa7f1a64be59ddc6,
-    type: 3}
-  Direction: {x: 0, y: 0, z: 0}
-  IsBig: 0
+  isBig: 0
 --- !u!1001 &6973223752370066902
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -191,15 +185,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 494976, guid: fa49e460baf435b4780da7196c2ab473, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.1
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 494976, guid: fa49e460baf435b4780da7196c2ab473, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.1
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 494976, guid: fa49e460baf435b4780da7196c2ab473, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.1
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 5444550, guid: fa49e460baf435b4780da7196c2ab473, type: 3}
       propertyPath: m_Mass
@@ -215,6 +209,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11425652, guid: fa49e460baf435b4780da7196c2ab473, type: 3}
+    - {fileID: 5444550, guid: fa49e460baf435b4780da7196c2ab473, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fa49e460baf435b4780da7196c2ab473, type: 3}
 --- !u!1 &6973223752370210214 stripped
 GameObject:

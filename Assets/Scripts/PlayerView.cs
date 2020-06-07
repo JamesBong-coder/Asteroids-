@@ -10,8 +10,8 @@ public class PlayerView : MonoBehaviour
     public List<BulletView> BView;
     [HideInInspector]
     public GameObject laser;
-    
 
+    public GameObject Fire;
     public AudioClip[] clips;
     private AudioSource aud;
 
@@ -20,6 +20,15 @@ public class PlayerView : MonoBehaviour
     {
         aud = GetComponent<AudioSource>();
         BView = new List<BulletView>();
+        Fire.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if (Input.GetAxis("Vertical") > 0)
+            Fire.SetActive(true);
+        else
+            Fire.SetActive(false);
     }
 
     public void Move(float[] Pos)

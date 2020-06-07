@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerPresenter
+public class Presenter
 {
-    public PlayerView View;
-    public PlayerModel Model;
+    private GameView View;
+    public GameModel Model;
 
-    public PlayerPresenter(PlayerView v, PlayerModel m)
+    public Presenter(GameView v, GameModel m)
     {
         View = v;
         Model = m;
@@ -15,59 +15,110 @@ public class PlayerPresenter
     
     public void Move()
     {
-        Model.Move();
-        View.Move(Model.GetPos());
+        Model.Player.Move();
+        View.Player.Move(Model.Player.GetPos());
     }
 
     public void Rotate(float dir)
     {
-        Model.RotatePlayer(dir);
-        View.Rotate(Model.angle);
+        Model.Player.RotatePlayer(dir);
+        View.Player.Rotate(Model.Player.angle);
     }
 
     public void UpdateAccel()
     {
-        Model.UpdateAccel();
+        Model.Player.UpdateAccel();
     }
 
     public void Shoot()
     {
-        if (Model.Shoot())
+        if (Model.Player.Shoot())
         {
-            View.Shoot(Model.Gpos, Model.angle);
+            View.Player.Shoot(Model.Player.Gpos, Model.Player.angle);
         }
     }
 
-    public void MoveBullets()
+    private void MoveBullets()
     {
-        Model.Gun.MoveBullets();
-        View.MoveBullets(Model.Gun.GetBulletsPos());
+        Model.Player.Gun.MoveBullets();
+        View.Player.MoveBullets(Model.Player.Gun.GetBulletsPos());
     }
 
-    public void CheckBullets()
+    private void CheckBullets()
     {
-        View.CheckBullets(Model.Gun.GetCheckBullets());
+        View.Player.CheckBullets(Model.Player.Gun.GetCheckBullets());
     }
 
     public void LaserShoot()
     {
-        if (Model.LaserShoot())
+        if (Model.Player.LaserShoot())
         {
-            View.LaserShoot(Model.Gpos, Model.angle);
+            View.Player.LaserShoot(Model.Player.Gpos, Model.Player.angle);
         }
     }
 
-    public void MoveLaser()
+    private void MoveLaser()
     {
-        if (Model.MoveLaser())
-            View.laser.GetComponent<LaserView>().Move(Model.Gpos, Model.angle);
+        if (Model.Player.MoveLaser())
+            View.Player.laser.GetComponent<LaserView>().Move(Model.Player.Gpos, Model.Player.angle);
         else
-            View.DestroyLaser();
+            View.Player.DestroyLaser();
     }
 
-    public float UpdateLaserMagazine()
+    private float UpdateLaserMagazine()
     {
-        return Model.Gun.UpdateLaserMagazine();
+        return Model.Player.Gun.UpdateLaserMagazine();
+    }
+
+
+    //Spawn
+    private void SpawnAster()
+    {
+        if(Model.Spawn.SpawnAsteroids())
+            View.Spawn.SpawnAster(Model.Spawn.GetLastPos("Aster"), Model.Spawn.GetLastAsterScale());
+    }
+
+    private void SpawnEnemy()
+    {
+        if (Model.Spawn.SpawnEnemy())
+            View.Spawn.SpawnEnemy(Model.Spawn.GetLastPos("Enemy"));
+    }
+
+    private void MoveAster()
+    {
+        Model.Spawn.MoveAsteroids();
+        View.Spawn.MoveAster(Model.Spawn.GetAllPos("Aster"));
+    }
+
+    private void MoveEnemy()
+    {
+        Model.MoveEnemy();
+        View.Spawn.MoveEnemy(Model.Spawn.GetAllPos("Enemy"));
+    }
+
+    private void CheckAster()
+    {
+        View.Spawn.CheckAster(Model.Spawn.CheckAster());
+    }
+
+
+    //All
+    public void PresenterFixedUpdate()
+    {
+        MoveBullets();
+        CheckBullets();
+        MoveLaser();
+        UpdateLaserMagazine();
+
+        MoveAster();
+        MoveEnemy();
+    }
+
+    public void PresenterUpdate()
+    {
+        SpawnAster();
+        SpawnEnemy();
+        CheckAster();
     }
 }
 

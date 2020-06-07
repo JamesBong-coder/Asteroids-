@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        LaserMagazine.value = gameObject.GetComponent<PlayercControl>()._PlayerPresenter.Model.Gun.LaserMagazine;
+        LaserMagazine.value = gameObject.GetComponent<GameController>()._Presenter.Model.Player.Gun.LaserMagazine;
         if (Player == null)
         {
             status.CheckDie = true; ;
