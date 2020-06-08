@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Drawing;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,9 +32,9 @@ public class PlayerView : MonoBehaviour
             Fire.SetActive(false);
     }
 
-    public void Move(float[] Pos)
+    public void Move(PointF Pos)
     {
-        transform.position = new Vector3(Pos[0], 1, Pos[1]);
+        transform.position = new Vector3(Pos.X, 1, Pos.Y);
     }
 
     public void Rotate(float angle)
@@ -41,19 +42,19 @@ public class PlayerView : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, -angle, 0); //поворот корабля
     }
 
-    public void Shoot(float[] Pos, float angle)
+    public void Shoot(PointF Pos, float angle)
     {
-        GameObject bullet = Instantiate(BulletPrefab, new Vector3(Pos[0], 1, Pos[1]), Quaternion.Euler(0, -angle, 0));
+        GameObject bullet = Instantiate(BulletPrefab, new Vector3(Pos.X, 1, Pos.Y), Quaternion.Euler(0, -angle, 0));
         BView.Add(bullet.GetComponent<BulletView>());
         aud.clip = clips[0];
         aud.Play();
     }     
    
-    public void MoveBullets(List<float[]> Pos)
+    public void MoveBullets(List<PointF> Pos)
     {
         for (int i = 0; i < BView.Count; i++)
         {
-            float[] p = Pos[i];
+            PointF p = Pos[i];
             BView[i].Move(p);
         }
     }
@@ -72,9 +73,9 @@ public class PlayerView : MonoBehaviour
         }
     }
 
-    public void LaserShoot(float[] pos, float angle)
+    public void LaserShoot(PointF pos, float angle)
     {
-        laser = Instantiate(LaserPrefab, new Vector3(pos[0], 1, pos[1]), Quaternion.Euler(0, -angle, 0)) as GameObject;
+        laser = Instantiate(LaserPrefab, new Vector3(pos.X, 1, pos.Y), Quaternion.Euler(0, -angle, 0)) as GameObject;
         aud.clip = clips[1];
         aud.Play();
     }

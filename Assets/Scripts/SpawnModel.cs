@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Linq;
+using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public struct MoveBase
 {
-    public float PosX;
-    public float PosY;
+    public PointF Pos;
     public float angle;
 
-    public MoveBase(float[] pos, float ang)
+    public MoveBase(PointF pos, float ang)
     {
-        PosX = pos[0];
-        PosY = pos[1];
+        Pos = pos;
         angle = ang;
     }
 }
@@ -38,7 +36,7 @@ public class SpawnModel
         Width = width;
         Height = height;
         SpeedObjects = speedObjects/100;
-        rnd = new System.Random();
+        rnd = new Random();
 
         DieWidth = width + 2;
         DieHeight = height + 2;
@@ -101,21 +99,21 @@ public class SpawnModel
         return check;
     } 
 
-    public List<float[]> GetAllPos(string AsterOrEnemy)
+    public List<PointF> GetAllPos(string AsterOrEnemy)
     {
-        List<float[]> pos = new List<float[]>();
+        List<PointF> pos = new List<PointF>();
         if (AsterOrEnemy == "Aster")
         {
             foreach (AsteroidModel aster in asteroids)
             {
-                pos.Add(aster.GetPos());
+                pos.Add(aster.Pos);
             }
         }
         else
         {
             foreach (EnemyModel enemy in enemies)
             {
-                pos.Add(enemy.GetPos());
+                pos.Add(enemy.Pos);
             }
         }
         return pos;
@@ -124,46 +122,46 @@ public class SpawnModel
     private MoveBase GetNewPos()
     {
         int IndWall = rnd.Next(1, 5); //  1
-        float[] pos = new float[2];   //3   4
+        PointF pos = new PointF();    //3   4
         float angle = 0;              //  2
 
 
         switch (IndWall)
         {
             case 1:
-                pos[0] = (rnd.Next(0, (int)Width) - Width / 2) + (float)rnd.NextDouble();
-                pos[1] = Height / 2;
+                pos.X = (rnd.Next(0, (int)Width) - Width / 2) + (float)rnd.NextDouble();
+                pos.Y = Height / 2;
                 angle = rnd.Next(200, 340);
                 break;
             case 2:
-                pos[0] = (rnd.Next(0, (int)Width) - Width / 2) + (float)rnd.NextDouble();
-                pos[1] = -Height / 2;
+                pos.X = (rnd.Next(0, (int)Width) - Width / 2) + (float)rnd.NextDouble();
+                pos.Y = -Height / 2;
                 angle = rnd.Next(20, 160);
                 break;
             case 3:
-                pos[1] = (rnd.Next(0, (int)Height) - Height / 2) + (float)rnd.NextDouble();
-                pos[0] = -Width / 2;
+                pos.Y = (rnd.Next(0, (int)Height) - Height / 2) + (float)rnd.NextDouble();
+                pos.X = -Width / 2;
                 angle = rnd.Next(20, 160) - 90;
                 break;
             case 4:
-                pos[1] = (rnd.Next(0, (int)Height) - Height / 2) + (float)rnd.NextDouble();
-                pos[0] = Width / 2;
+                pos.Y = (rnd.Next(0, (int)Height) - Height / 2) + (float)rnd.NextDouble();
+                pos.X = Width / 2;
                 angle = rnd.Next(110, 250);
                 break;
         }
         return new MoveBase(pos, angle);
     }
 
-    public float[] GetLastPos(string AsterOrEnemy)
+    public PointF GetLastPos(string AsterOrEnemy)
     {
-        float[] pos = new float[2];
+        PointF pos = new PointF();
         if(AsterOrEnemy == "Aster")
         {
-            pos = asteroids.Last().GetPos();
+            pos = asteroids.Last().Pos;
         }
         else
         {
-            enemies.Last().GetPos();
+            pos = enemies.Last().Pos;
         }
         return pos;
     }
@@ -180,7 +178,7 @@ public class AsteroidModel : MoveClass
     private bool isDead;
 
     public AsteroidModel(float speed, MoveBase move, bool big)
-        : base(speed, move.PosX, move.PosY, move.angle)
+        : base(speed, move.Pos, move.angle)
     {
         isBig = big;
         isDead = false;
@@ -188,7 +186,7 @@ public class AsteroidModel : MoveClass
 
     public bool CheckAster()
     {
-        if ((PosX < -SpawnModel.DieWidth || PosX > SpawnModel.DieWidth) || (PosY < -SpawnModel.DieHeight || PosY > SpawnModel.DieHeight))
+        if ((Pos.X < -SpawnModel.DieWidth || Pos.X > SpawnModel.DieWidth) || (Pos.Y < -SpawnModel.DieHeight || Pos.Y > SpawnModel.DieHeight))
             isDead = true;
         return isDead;
     }
@@ -197,30 +195,22 @@ public class AsteroidModel : MoveClass
 
 public class EnemyModel
 {
-    private float PosX;
-    private float PosY;
+    public PointF Pos;
 
     private float Speed;
 
     public EnemyModel(MoveBase m, float speed)
     {
-        PosX = m.PosX;
-        PosY = m.PosY;
+        Pos = m.Pos;
         Speed = speed;
     }
 
-    public float[] GetPos()
+    public void Move(PointF PlayerPos)
     {
-        return new float[] { PosX, PosY };
-    }
-
-    public void Move(float[] PlayerPos)
-    {
-        PlayerPos[0] -= PosX;
-        PlayerPos[1] -= PosY;
-        float dist = (float)Math.Sqrt(PlayerPos[0] * PlayerPos[0] + PlayerPos[1] * PlayerPos[1]);
-        PosX += PlayerPos[0] / dist * Speed;
-        PosY += PlayerPos[1] / dist * Speed;
-        Debug.Log(PosX + " " + PosY);
+        PlayerPos.X -= Pos.X;
+        PlayerPos.Y -= Pos.Y;
+        float dist = (float)Math.Sqrt(PlayerPos.X * PlayerPos.X + PlayerPos.Y * PlayerPos.Y);
+        Pos.X += PlayerPos.X / dist * Speed;
+        Pos.Y += PlayerPos.Y / dist * Speed;
     }
 }

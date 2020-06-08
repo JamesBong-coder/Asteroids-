@@ -16,7 +16,7 @@ public class Presenter
     public void Move()
     {
         Model.Player.Move();
-        View.Player.Move(Model.Player.GetPos());
+        View.Player.Move(Model.Player.Pos);
     }
 
     public void Rotate(float dir)

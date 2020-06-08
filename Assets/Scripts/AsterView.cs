@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Drawing;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,9 +18,9 @@ public class AsterView : MonoBehaviour
         transform.Rotate(Vector3.up);
     }
 
-    public void Move(float[] pos)
+    public void Move(PointF pos)
     {
-        transform.position = new Vector3(pos[0], 1, pos[1]);
+        transform.position = new Vector3(pos.X, 1, pos.Y);
     }
 
     public void DestroyAster()

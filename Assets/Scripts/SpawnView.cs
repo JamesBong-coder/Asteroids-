@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Drawing;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,26 +17,26 @@ public class SpawnView : MonoBehaviour
         enemies = new List<EnemyView>(); 
     }
 
-    public void SpawnAster(float[] pos, bool isBig)
+    public void SpawnAster(PointF pos, bool isBig)
     {
-        GameObject aster = Instantiate(AsterPrefab, new Vector3(pos[0], 1, pos[1]), Quaternion.identity);
+        GameObject aster = Instantiate(AsterPrefab, new Vector3(pos.X, 1, pos.Y), Quaternion.identity);
         aster.GetComponent<AsterView>().isBig = isBig;
         asteroids.Add(aster.GetComponent<AsterView>());
     }
 
-    public void SpawnEnemy(float[] pos)
+    public void SpawnEnemy(PointF pos)
     {
-        GameObject enemy = Instantiate(EnemyPrefab, new Vector3(pos[0], 1, pos[1]), Quaternion.identity);
+        GameObject enemy = Instantiate(EnemyPrefab, new Vector3(pos.X, 1, pos.Y), Quaternion.identity);
         enemies.Add(enemy.GetComponent<EnemyView>());
     }
 
-    public void MoveAster(List<float[]> pos)
+    public void MoveAster(List<PointF> pos)
     {
         for(int i=0; i < pos.Count; i++)
             asteroids[i].Move(pos[i]);
     }
 
-    public void MoveEnemy(List<float[]> pos)
+    public void MoveEnemy(List<PointF> pos)
     {
         for (int i = 0; i < pos.Count; i++)
             enemies[i].Move(pos[i]);

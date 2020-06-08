@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -9,7 +10,7 @@ public class PlayerModel : MoveClass
     public static float Width;
     public static float Height;
     public GunModel Gun;
-    public float[] Gpos;
+    public PointF Gpos;
 
     public PlayerModel(float speed, float angularspeed, float WidthScene, float HeigthScene, GunModel gun)
         : base(speed/100)
@@ -20,7 +21,7 @@ public class PlayerModel : MoveClass
         Gun = gun;
 
         Acceleration = 0;
-        Gpos = new float[] { 0, 0 };
+        Gpos = PointF.Empty;
     }
 
     public float RotatePlayer(float Dir)
@@ -40,79 +41,49 @@ public class PlayerModel : MoveClass
     {
         if(Acceleration > 0)
             Acceleration -= 0.01f;
-        if (PosX < -Width || PosX > Width) PosX *= -1;
-        if (PosY < -Height || PosY > Height) PosY *= -1;
+        if (Pos.X < -Width || Pos.X > Width) Pos.X *= -1;
+        if (Pos.Y < -Height || Pos.Y > Height) Pos.Y *= -1;
         Move(Acceleration);
     }
 
     public bool Shoot()
     {
-        setGunPos();
+        setGunPos(false);
         if (Gun.Shoot(angle, Gpos)) return true;
         else return false;
     }
 
     public bool LaserShoot()
     {
-        setGunPos();
+        setGunPos(true);
         if (Gun.LaserShoot(angle, Gpos)) return true;
         else return false;
     }
 
     public bool MoveLaser()
     {
-        setGunPos();
+        setGunPos(true);
         if (Gun.MoveLaser(Gpos, angle))
             return true;
         else return false;
     }
 
-    public void setGunPos()
+    public void setGunPos(bool isLaser)
     {
-        Gpos[0] = PosX + (float)(Math.Cos(GetRadians(angle)) * 0.8);
-        Gpos[1] = PosY + (float)(Math.Sin(GetRadians(angle)) * 0.8);
-    }
-}
-
-public abstract class MoveClass 
-{
-    public float Speed;
-    public float PosX;
-    public float PosY;
-    public float angle;
-
-    public MoveClass(float speed, float posX, float posY, float Angle)
-    {
-        Speed = speed;
-        PosX = posX;
-        PosY = posY;
-        angle = Angle;
-    }
-    public MoveClass(float speed)
-    {
-        Speed = speed;
-        PosX = 0;
-        PosY = 0;
-        angle = 0;
-    }
-
-    public float GetRadians(float angle)
-    {
-        return (angle * (float)Math.PI) / 180;
-    }
-
-    public float[] GetPos()
-    {
-        return new float[] { PosX, PosY };
-    }
-
-    public void Move(double accel)
-    {
-        PosX += (float)(Math.Cos(GetRadians(angle)) * Speed * accel);
-        PosY += (float)(Math.Sin(GetRadians(angle)) * Speed * accel);
+        if (!isLaser)
+        {
+            Gpos.X = Pos.X + (float)(Math.Cos(GetRadians(angle)) * 0.8);
+            Gpos.Y = Pos.Y + (float)(Math.Sin(GetRadians(angle)) * 0.8);
+        }
+        else
+        {
+            Gpos.X = Pos.X + (float)(Math.Cos(GetRadians(angle)) * 10.3);
+            Gpos.Y = Pos.Y + (float)(Math.Sin(GetRadians(angle)) * 10.3);
+        }
     }
 
 }
+
 
 public class GunModel
 {
@@ -162,17 +133,17 @@ public class GunModel
         return check;
     }
 
-    public List<float[]> GetBulletsPos()
+    public List<PointF> GetBulletsPos()
     {
-        List<float[]> bPos = new List<float[]>();
+        List<PointF> bPos = new List<PointF>();
         foreach(BulletModel b in bullets)
         {
-            bPos.Add(b.GetPos());
+            bPos.Add(b.Pos);
         }
         return bPos;
     }
 
-    public bool Shoot(float angle, float[] pos)
+    public bool Shoot(float angle, PointF pos)
     {
         if (DateTime.Now > nextShoot)
         {
@@ -184,11 +155,11 @@ public class GunModel
             return false;
     }
 
-    public bool LaserShoot(float angle, float[] pos)
+    public bool LaserShoot(float angle, PointF pos)
     {
         if (DateTime.Now > nextLaser && LaserMagazine >= 25)
         {
-            laser = new LaserModel(pos[0], pos[1], angle);
+            laser = new LaserModel(pos, angle);
             LaserMagazine -= 25;
             nextLaser = DateTime.Now.AddSeconds(LaserDelay);
             return true;
@@ -197,7 +168,7 @@ public class GunModel
     }
     
 
-    public bool MoveLaser(float[] pos, float angle)
+    public bool MoveLaser(PointF pos, float angle)
     {
         if (laser == null) return false;
         else
@@ -228,12 +199,12 @@ public class BulletModel : MoveClass
 {
     public bool IsDead;
 
-    public BulletModel(float speed, float[] pos, float ang)
-        : base(speed / 100, pos[0], pos[1], ang) { IsDead = false; }
+    public BulletModel(float speed, PointF pos, float ang)
+        : base(speed / 100, pos, ang) { IsDead = false; }
 
     public void CheckDeath()
     {
-        if ((PosX < -PlayerModel.Width || PosX > PlayerModel.Width) || (PosY < -PlayerModel.Height || PosY > PlayerModel.Height))
+        if ((Pos.X < -PlayerModel.Width || Pos.X > PlayerModel.Width) || (Pos.Y < -PlayerModel.Height || Pos.Y > PlayerModel.Height))
             IsDead = true;
     }
 }
@@ -241,20 +212,19 @@ public class BulletModel : MoveClass
 public class LaserModel
 {
     public DateTime TimeDeath;
-    float PosX, PosY, Angle;
+    public PointF Pos;
+    float Angle;
 
-    public LaserModel(float posX, float posY, float angle)
+    public LaserModel(PointF pos, float angle)
     {
-        PosX = posX;
-        PosY = posY;
+        Pos = pos;
         Angle = angle;
         TimeDeath = DateTime.Now.AddSeconds(0.5);
     }
 
-    public void Move(float[] pos,  float angle)
+    public void Move(PointF pos,  float angle)
     {
-        PosX = pos[0];
-        PosY = pos[1];
+        Pos = pos;
         Angle = angle;
     }
 

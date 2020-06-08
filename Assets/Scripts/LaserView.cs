@@ -1,12 +1,13 @@
 ﻿using System.Collections;
+using System.Drawing;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class LaserView : MonoBehaviour
 {
-    public void Move(float[] pos, float angle)
+    public void Move(PointF pos, float angle)
     {
-        transform.position = new Vector3(pos[0], 1, pos[1]);
+        transform.position = new Vector3(pos.X, 1, pos.Y);
         transform.rotation = Quaternion.Euler(0, -angle, 0);
     }
 }
