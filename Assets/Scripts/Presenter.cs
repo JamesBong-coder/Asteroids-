@@ -1,16 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AsteroidLib;
 
 public class Presenter
 {
     private GameView View;
-    public GameModel Model;
+    private GameModel Model;
+    private bool GameOver;
 
     public Presenter(GameView v, GameModel m)
     {
         View = v;
         Model = m;
+        GameOver = false;
     }
     
     public void Move()
@@ -21,18 +24,19 @@ public class Presenter
 
     public void Rotate(float dir)
     {
-        Model.Player.RotatePlayer(dir);
-        View.Player.Rotate(Model.Player.angle);
+            Model.Player.RotatePlayer(dir);
+            View.Player.Rotate(Model.Player.angle);
     }
 
     public void UpdateAccel()
     {
-        Model.Player.UpdateAccel();
+           Model.Player.UpdateAccel();
     }
 
     public void Shoot()
     {
-        if (Model.Player.Shoot())
+        if (!GameOver)
+            if (Model.Player.Shoot())
         {
             View.Player.Shoot(Model.Player.Gpos, Model.Player.angle);
         }
@@ -51,7 +55,8 @@ public class Presenter
 
     public void LaserShoot()
     {
-        if (Model.Player.LaserShoot())
+        if (!GameOver)
+            if (Model.Player.LaserShoot())
         {
             View.Player.LaserShoot(Model.Player.Gpos, Model.Player.angle);
         }
@@ -109,21 +114,29 @@ public class Presenter
     //All
     public void PresenterFixedUpdate()
     {
+        Move();
         MoveBullets();
         MoveLaser();
-        UpdateLaserMagazine();
-        Model.CheckCollision();
+        View.SetLaserMagazine(UpdateLaserMagazine());
         CheckAster();
         CheckEnemies();
         CheckBullets();
         MoveAster();
         MoveEnemy();
+        Model.CheckCollision();
+        if(Model.GameOver && !GameOver)
+        {
+            GameOver = true;
+            View.GameOver(Model.GetScore());
+        }
     }
 
     public void PresenterUpdate()
     {
         SpawnAster();
         SpawnEnemy();
+        View.SetScore(Model.GetScore());
+
     }
 }
 

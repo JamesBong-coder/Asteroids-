@@ -193,10 +193,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletPrefab: {fileID: 0}
   LaserPrefab: {fileID: 0}
-  BView: []
   laser: {fileID: 0}
   Fire: {fileID: 0}
   clips: []
+  Explotion: {fileID: 0}
 --- !u!136 &6460718469683990761
 CapsuleCollider:
   m_ObjectHideFlags: 0

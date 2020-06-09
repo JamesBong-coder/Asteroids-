@@ -8,13 +8,15 @@ public class PlayerView : MonoBehaviour
     public GameObject BulletPrefab;
     public GameObject LaserPrefab;
     [HideInInspector]
-    public List<BulletView> BView;
+    private List<BulletView> BView;
     [HideInInspector]
     public GameObject laser;
 
     public GameObject Fire;
     public AudioClip[] clips;
     private AudioSource aud;
+
+    public GameObject Explotion;
 
 
     public void Start()
@@ -83,5 +85,12 @@ public class PlayerView : MonoBehaviour
     public void DestroyLaser()
     {
         Destroy(laser);
+    }
+
+    public void DestroyPlayer()
+    {
+        GameObject exp = Instantiate(Explotion, transform.position, Quaternion.identity);
+        exp.transform.localScale *= 2;
+        Destroy(gameObject);
     }
 }

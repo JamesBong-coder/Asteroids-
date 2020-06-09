@@ -1,12 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using AsteroidLib;
 
 public class GameController : MonoBehaviour
 {
     public GameObject Player;
-    public PlayerModel _PlayerModel;
-    public GunModel _Gun;
+    private PlayerModel _PlayerModel;
+    private GunModel _Gun;
+
+    public Slider LaserMagazine;
+    public Text ScoreText;
+    public GameObject LoseMenu;
+    public Text LoseLabel;
 
     public float speed;
     public float angularSpeed;
@@ -19,7 +27,7 @@ public class GameController : MonoBehaviour
     public float Speed;
     private SpawnModel _Model;
 
-    public Presenter _Presenter; 
+    private Presenter _Presenter; 
 
     void Start()
     {
@@ -31,17 +39,14 @@ public class GameController : MonoBehaviour
         _Model = new SpawnModel(DelayAster, DelayEnemy, 20, 12, Speed);
 
         GameModel Model = new GameModel(_PlayerModel, _Model);
-        GameView View = new GameView(Pview, Sview);
+        GameView View = new GameView(Pview, Sview, LaserMagazine, ScoreText, LoseMenu, LoseLabel);
         _Presenter = new Presenter(View, Model);
     }
 
     private void FixedUpdate()
     {
         if (Input.GetAxis("Vertical") > 0) _Presenter.UpdateAccel();
-        _Presenter.Move();
-
         _Presenter.Rotate(Input.GetAxis("Horizontal"));
-
         _Presenter.PresenterFixedUpdate();
     }
 
@@ -52,7 +57,17 @@ public class GameController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.M))
             _Presenter.LaserShoot();
-
         _Presenter.PresenterUpdate();
+    }
+
+    public void NGButton()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("Game");
+    }
+
+    public void ExitButton()
+    {
+        Application.Quit();
     }
 }

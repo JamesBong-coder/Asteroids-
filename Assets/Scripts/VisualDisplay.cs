@@ -5,7 +5,6 @@ using UnityEngine;
 public class VisualDisplay : MonoBehaviour
 {
     private Camera MainCam;
-    [HideInInspector]
     private bool is3D;
 
     void Start()

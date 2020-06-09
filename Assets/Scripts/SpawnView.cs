@@ -8,8 +8,8 @@ public class SpawnView : MonoBehaviour
     public GameObject AsterPrefab;
     public GameObject EnemyPrefab;
 
-    public List<AsterView> asteroids;
-    public List<EnemyView> enemies;
+    private List<AsterView> asteroids;
+    private List<EnemyView> enemies;
 
     private void Start()
     {
@@ -49,6 +49,11 @@ public class SpawnView : MonoBehaviour
             if (check[i])
             {
                 asteroids[i].DestroyAster();
+                if (asteroids[i].isBig)
+                {
+                    for (int J = 0; J < 5; J++)
+                        SpawnAster(new PointF(asteroids[i].transform.position.x, asteroids[i].transform.position.z), false);
+                }
                 asteroids.RemoveAt(i);
                 check.RemoveAt(i);
                 i--;
