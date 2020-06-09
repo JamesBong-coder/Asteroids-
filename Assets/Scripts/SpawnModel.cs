@@ -23,11 +23,13 @@ public class SpawnModel
     private DateTime nextAster, nextEnemy;
     public float Width, Height;
     public static float DieWidth, DieHeight;
-    private System.Random rnd;
+    private Random rnd;
 
     public List<AsteroidModel> asteroids;
     public List<EnemyModel> enemies;
 
+    SizeF SizeAster;
+    SizeF SizeEnemy;
 
     public SpawnModel(float asterDelay, float enemyDelay, float width, float height, float speedObjects)
     {
@@ -44,7 +46,9 @@ public class SpawnModel
         nextEnemy = DateTime.Now.AddSeconds(DelayEnemy);
         asteroids = new List<AsteroidModel>();
         enemies = new List<EnemyModel>();
-        
+
+        SizeAster = new SizeF(0.7f, 0.7f);
+        SizeEnemy = new SizeF(1.5f, 1.5f);
     }
 
     public bool SpawnAsteroids()
@@ -53,9 +57,9 @@ public class SpawnModel
         {
             int check = rnd.Next(1, 5);
             if(check == 1)
-                asteroids.Add(new AsteroidModel(SpeedObjects, GetNewPos(), true));
+                asteroids.Add(new AsteroidModel(SpeedObjects, GetNewPos(), true, new SizeF(SizeAster.Width *3, SizeAster.Height *3)));
             else
-                asteroids.Add(new AsteroidModel(SpeedObjects, GetNewPos(), false));
+                asteroids.Add(new AsteroidModel(SpeedObjects, GetNewPos(), false, SizeAster));
 
             nextAster = DateTime.Now.AddSeconds(DelayAster);
             return true;
@@ -67,7 +71,7 @@ public class SpawnModel
     {
         if (DateTime.Now > nextEnemy)
         {
-            enemies.Add(new EnemyModel(GetNewPos(), SpeedObjects));
+            enemies.Add(new EnemyModel(GetNewPos(), SpeedObjects, SizeEnemy));
             nextEnemy = DateTime.Now.AddSeconds(DelayEnemy);
             return true;
         }
@@ -98,6 +102,23 @@ public class SpawnModel
         }
         return check;
     } 
+
+    public List<bool> CheckEnemy()
+    {
+        List<bool> check = new List<bool>();
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            if (enemies[i].isDead)
+            {
+                check.Add(enemies[i].isDead);
+                enemies.RemoveAt(i);
+                i--;
+            }
+            else
+                check.Add(enemies[i].isDead);
+        }
+        return check;
+    }
 
     public List<PointF> GetAllPos(string AsterOrEnemy)
     {
@@ -175,10 +196,10 @@ public class SpawnModel
 public class AsteroidModel : MoveClass
 {
     public bool isBig;
-    private bool isDead;
+    public bool isDead;
 
-    public AsteroidModel(float speed, MoveBase move, bool big)
-        : base(speed, move.Pos, move.angle)
+    public AsteroidModel(float speed, MoveBase move, bool big, SizeF size)
+        : base(speed, move.Pos, move.angle, size)
     {
         isBig = big;
         isDead = false;
@@ -191,19 +212,16 @@ public class AsteroidModel : MoveClass
         return isDead;
     }
 
+
+
 }
 
-public class EnemyModel
+public class EnemyModel : MoveClass
 {
-    public PointF Pos;
+    public bool isDead;
 
-    private float Speed;
-
-    public EnemyModel(MoveBase m, float speed)
-    {
-        Pos = m.Pos;
-        Speed = speed;
-    }
+    public EnemyModel(MoveBase m, float speed, SizeF size)
+        : base(speed, m.Pos, m.angle, size) { isDead = false; }
 
     public void Move(PointF PlayerPos)
     {

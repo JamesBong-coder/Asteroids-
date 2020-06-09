@@ -12,6 +12,7 @@ public class PlayerModel : MoveClass
     public GunModel Gun;
     public PointF Gpos;
 
+
     public PlayerModel(float speed, float angularspeed, float WidthScene, float HeigthScene, GunModel gun)
         : base(speed/100)
     {
@@ -94,10 +95,11 @@ public class GunModel
     private DateTime nextShoot;
     private DateTime nextLaser;
 
-    private LaserModel laser;
+    public LaserModel laser;
     public List<BulletModel> bullets;
 
-    private BulletModel bullet;
+    public SizeF SizeBullet;
+    public SizeF SizeLaser;
 
     public GunModel(float shootD, float laserD)
     {
@@ -108,6 +110,9 @@ public class GunModel
         nextShoot = DateTime.Now;
         nextLaser = DateTime.Now;
         bullets = new List<BulletModel>();
+
+        SizeBullet = new SizeF(0.45f, 0.1f);
+        SizeLaser = new SizeF(19, 0.4f);
     }
 
     public void MoveBullets()
@@ -147,7 +152,7 @@ public class GunModel
     {
         if (DateTime.Now > nextShoot)
         {
-            bullets.Add(new BulletModel(15, pos, angle));
+            bullets.Add(new BulletModel(15, pos, angle, SizeBullet));
             nextShoot = DateTime.Now.AddSeconds(ShootDelay);
             return true;
         }
@@ -159,7 +164,7 @@ public class GunModel
     {
         if (DateTime.Now > nextLaser && LaserMagazine >= 25)
         {
-            laser = new LaserModel(pos, angle);
+            laser = new LaserModel(pos, angle, SizeLaser);
             LaserMagazine -= 25;
             nextLaser = DateTime.Now.AddSeconds(LaserDelay);
             return true;
@@ -185,7 +190,7 @@ public class GunModel
             }
         }
     }
-    
+
     public float UpdateLaserMagazine()
     {
         if (LaserMagazine >100)
@@ -199,8 +204,8 @@ public class BulletModel : MoveClass
 {
     public bool IsDead;
 
-    public BulletModel(float speed, PointF pos, float ang)
-        : base(speed / 100, pos, ang) { IsDead = false; }
+    public BulletModel(float speed, PointF pos, float ang, SizeF size)
+        : base(speed / 100, pos, ang, size) { IsDead = false; }
 
     public void CheckDeath()
     {
@@ -209,23 +214,20 @@ public class BulletModel : MoveClass
     }
 }
 
-public class LaserModel
+public class LaserModel : MoveClass
 {
     public DateTime TimeDeath;
-    public PointF Pos;
-    float Angle;
 
-    public LaserModel(PointF pos, float angle)
+    public LaserModel(PointF pos, float angle, SizeF size)
+        :base(1, pos, angle, size)
     {
-        Pos = pos;
-        Angle = angle;
         TimeDeath = DateTime.Now.AddSeconds(0.5);
     }
 
-    public void Move(PointF pos,  float angle)
+    public void Move(PointF pos,  float ang)
     {
         Pos = pos;
-        Angle = angle;
+        angle = ang;
     }
 
     public bool CheckLaserDeath()

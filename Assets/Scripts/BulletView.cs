@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BulletView : MonoBehaviour
 {
+
     public void Move(PointF Pos)
     {
         transform.position = new Vector3(Pos.X, 1, Pos.Y);

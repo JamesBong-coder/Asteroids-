@@ -108,6 +108,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBig: 0
+  ExplotionPrefab: {fileID: 4824373851815196772, guid: f92383e4b2830b54fa7f1a64be59ddc6,
+    type: 3}
 --- !u!1001 &6973223752370066902
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -101,15 +101,21 @@ public class Presenter
         View.Spawn.CheckAster(Model.Spawn.CheckAster());
     }
 
+    private void CheckEnemies()
+    {
+        View.Spawn.CheckEnemy(Model.Spawn.CheckEnemy());
+    }
 
     //All
     public void PresenterFixedUpdate()
     {
         MoveBullets();
-        CheckBullets();
         MoveLaser();
         UpdateLaserMagazine();
-
+        Model.CheckCollision();
+        CheckAster();
+        CheckEnemies();
+        CheckBullets();
         MoveAster();
         MoveEnemy();
     }
@@ -118,7 +124,6 @@ public class Presenter
     {
         SpawnAster();
         SpawnEnemy();
-        CheckAster();
     }
 }
 

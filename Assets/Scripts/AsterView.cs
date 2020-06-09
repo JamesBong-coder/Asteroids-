@@ -6,6 +6,7 @@ using UnityEngine;
 public class AsterView : MonoBehaviour
 {
     public bool isBig;
+    public GameObject ExplotionPrefab;
 
     void Start()
     {
@@ -26,5 +27,6 @@ public class AsterView : MonoBehaviour
     public void DestroyAster()
     {
         Destroy(gameObject);
+        Instantiate(ExplotionPrefab, transform.position, Quaternion.identity);
     }
 }

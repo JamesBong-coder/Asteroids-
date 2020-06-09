@@ -55,4 +55,18 @@ public class SpawnView : MonoBehaviour
             }
         }
     }
+
+    public void CheckEnemy(List<bool> check)
+    {
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            if (check[i])
+            {
+                enemies[i].DestroyEnemy();
+                enemies.RemoveAt(i);
+                check.RemoveAt(i);
+                i--;
+            }
+        }
+    }
 }
