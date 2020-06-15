@@ -52,10 +52,10 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetMouseButton(0))
             _Presenter.Shoot();
 
-        if (Input.GetKey(KeyCode.M))
+        if (Input.GetMouseButton(1))
             _Presenter.LaserShoot();
         _Presenter.PresenterUpdate();
     }
